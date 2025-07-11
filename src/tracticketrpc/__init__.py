@@ -37,7 +37,7 @@ Constants of JSON-RPC interface for Trac ticket management.
 """
 
 # plugin version
-VERSION = '0.9.1'
+VERSION = '0.9.2'
 
 # HTTP request path for ticket
 HTTP_REQUEST_PATH = '/ticketrpc'

@@ -14,7 +14,7 @@ import os
 import sys
 import time
 
-from requests import request
+from requests import Session
 from requests.auth import HTTPBasicAuth
 
 from tracticketrpc import HTTP_OK
@@ -28,6 +28,7 @@ TRAC_SERVER = os.environ.get('TEST_TRPC_TRAC_SERVER')
 AUTH = HTTPBasicAuth(TRAC_USER, TRAC_PWD)
 HTTP_HEADERS = {'Accept': 'application/json', 'Content-type': 'application/json'}
 SERVER_URL = f'{TRAC_SERVER}/{PROJECT}/ticketrpc'
+LOGIN_URL = f'{TRAC_SERVER}/{PROJECT}/login'
 
 
 def send_request(req_data: dict) -> dict:
@@ -36,7 +37,11 @@ def send_request(req_data: dict) -> dict:
     :param req_data: JSON-RPC request data
     :return: JSON-RPC response data
     """
-    _resp = request('POST', SERVER_URL, timeout=30, headers=HTTP_HEADERS,
+    _session = Session()
+    _resp = _session.get(LOGIN_URL, timeout=30, auth=AUTH)
+    if _resp.status_code != HTTP_OK:
+        raise RuntimeError(f'HTTP code {_resp.status_code}: {_resp.reason}')
+    _resp = _session.post(SERVER_URL, timeout=30, headers=HTTP_HEADERS,
                     auth=AUTH, json=req_data, verify=False)
     if _resp.status_code != HTTP_OK:
         raise RuntimeError(f'HTTP code {_resp.status_code}: {_resp.reason}')

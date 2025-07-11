@@ -30,6 +30,15 @@ of a ticket and close an existing ticket.<br/>
 Project was triggered, because I wanted to use Trac from Kiwi test case management system.
 
 
+## Changelog
+
+### v0.9.2 (11 Jul 2025)
+- Return full ticket details in response to ticket creation request
+
+### v0.9.1 (5 Jul 2025)
+- initial Release
+
+
 ## Getting Started
 
 ### Prerequisites
@@ -39,9 +48,10 @@ The plugin needs Python, version 3.7 or higher and Trac, version 1.6 or higher.
 
 ### Installation
 
-1. Download Python wheel
+1. Make sure you are working on the local Python installation used by your trac server,
+   eventually activate appropriate virtual environment
 
-1. Install wheel into local Python installation used by your trac server with pip
+1. pip install trac_ticketrpc
 
 1. Enable plugin by adding the following in affected trac.ini files:
 
@@ -53,7 +63,9 @@ The plugin needs Python, version 3.7 or higher and Trac, version 1.6 or higher.
 ### JSON RPC API
 
 All HTTP requests must be issued using method 'POST' and contain header attributes
-'Content-type'='application/json' and 'Accept'='application/json'.
+'Content-type'='application/json' and 'Accept'='application/json'.<br/>
+Make sure to supply a session cookie for methods changing Trac repository.
+This can be achieved by sending an HTTP GET request with valid credentials to Trac-Server-URL/project-name/login before the RPC request, but in the same session.<br/>
 The plugin supports the methods listed below.
 
 * Create new ticket
@@ -61,7 +73,7 @@ The plugin supports the methods listed below.
     method: 'ticket.create'<br/>
     mandatory parameter: 'summary', 'description', 'project'<br/>
     optional parameter: 'priority', 'version', 'component'<br/>
-    result: 'id'=Trac ticket ID
+    result: Trac ticket data as returned by ticket details
 * Add ticket comment
 
     method: 'ticket.add_comment'<br/>

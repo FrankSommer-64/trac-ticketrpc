@@ -221,7 +221,7 @@ class RpcTicketHandler(Component):
         Creates a new ticket.
         :param req_data: HTTP request contents
         :param user: authenticated Trac user
-        :returns: ID of created Trac ticket
+        :returns: ticket data
         :raises RpcException: if request cannot be processed
         """
         _params = self._validated_params(_RPC_PARAMS_CREATE, req_data.get('params'),
@@ -235,7 +235,9 @@ class RpcTicketHandler(Component):
         _ticket['status'] = 'new'
         _ticket['resolution'] = ''
         _ticket_id = _ticket.insert()
-        return {'id': str(_ticket_id)}
+        _ticket_values = trac.ticket.model.Ticket(self.env, _ticket_id).values.copy() # noqa
+        _ticket_values['id'] = str(_ticket_id)
+        return _ticket_values
 
     def _add_ticket_comment(self, req_data, user) -> dict:
         """
