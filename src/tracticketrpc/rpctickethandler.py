@@ -293,14 +293,16 @@ class RpcTicketHandler(Component):
         """
         Returns detail information about an existing ticket.
         :param req_data: HTTP request contents
-        :returns: all fields of specified Trac ticket
+        :returns: all fields of specified Trac ticket including ID
         :raises RpcException: if request cannot be processed
         """
         _params = self._validated_params(_RPC_PARAMS_DETAILS, req_data.get('params'),
                                          req_data.get('id'))
         # pylint: disable=no-member
         t = trac.ticket.model.Ticket(self.env, _params['id']) # noqa
-        return t.values
+        result = t.values.copy()
+        result['id'] = _params['id']
+        return result
 
     def _validated_params(self, desc: dict, params: dict, req_id: Union[str, int, None]) -> dict:
         """

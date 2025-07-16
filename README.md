@@ -32,6 +32,9 @@ Project was triggered, because I wanted to use Trac from Kiwi test case manageme
 
 ## Changelog
 
+### v0.9.3 (15 Jul 2025)
+- Return Trac ticket ID in response to ticket details request
+
 ### v0.9.2 (11 Jul 2025)
 - Return full ticket details in response to ticket creation request
 
@@ -89,7 +92,7 @@ The plugin supports the methods listed below.
 
     method: 'ticket.details'<br/>
     mandatory parameter: 'id', 'project'<br/>
-    result: 'summary', 'reporter', 'owner', 'description', 'type', 'status', 'priority',<br/>
+    result: 'id', 'summary', 'reporter', 'owner', 'description', 'type', 'status', 'priority',<br/>
     'milestone', 'component', 'version', 'keywords', 'cc', 'time', 'changetime'
 * Get ticket comments
 
